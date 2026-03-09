@@ -1,0 +1,318 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #0c0c14;
+  --surface: #11111c;
+  --border:  #1e1e30;
+  --text:    #dcdcf0;
+  --muted:   #50506a;
+  --accent:  #7c6af7;
+  --topbar:  36px;
+}
+
+html, body {
+  height: 100%; width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Top bar ── */
+#topbar {
+  height: var(--topbar);
+  min-height: var(--topbar);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 10px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.logo-bar {
+  display: inline-block;
+  width: 3px; height: 14px;
+  border-radius: 2px;
+}
+
+.sep { width: 1px; height: 18px; background: var(--border); flex-shrink: 0; }
+
+/* ── Toggle buttons — color driven by --c CSS var set inline ── */
+#toggles, #reloads { display: flex; gap: 3px; flex-shrink: 0; }
+
+.ptoggle {
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  padding: 3px 9px;
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--c) 25%, transparent);
+  cursor: pointer;
+  background: transparent;
+  color: var(--c);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  transition: opacity 0.15s, background 0.15s;
+}
+.ptoggle.active {
+  background: color-mix(in srgb, var(--c) 12%, transparent);
+  border-color: var(--c);
+}
+.ptoggle:not(.active) { opacity: 0.3; }
+
+/* ── Reload buttons ── */
+.reload-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  padding: 2px 7px;
+  border-radius: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.1s, border-color 0.1s;
+}
+.reload-btn:hover { color: var(--text); border-color: var(--muted); }
+
+/* ── Panels ── */
+#panels {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.panel {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.panel.hidden { flex: 0 0 0 !important; overflow: hidden; }
+
+.panel iframe {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  min-height: 0;
+}
+
+/* Loading overlay */
+.loader {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 5;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+.loader.gone { opacity: 0; pointer-events: none; }
+
+.spinner {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  animation: spin 0.75s linear infinite;
+  /* border-top-color set inline per bot */
+}
+.loader-label { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Divider ── */
+.divider {
+  width: 3px;
+  flex: 0 0 3px;
+  background: var(--border);
+  cursor: col-resize;
+  z-index: 10;
+  transition: background 0.15s;
+}
+.divider:hover, .divider.dragging { background: var(--accent); }
+
+/* ── Input bar ── */
+#inputbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+#prompt {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  padding: 7px 11px;
+  resize: none;
+  outline: none;
+  line-height: 1.5;
+  min-height: 34px;
+  max-height: 120px;
+  transition: border-color 0.15s;
+}
+#prompt::placeholder { color: var(--muted); }
+#prompt:focus { border-color: var(--accent); }
+
+#send-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+#send-btn:hover { opacity: 0.85; }
+
+/* ── Toast ── */
+#toast {
+  position: fixed;
+  bottom: 62px;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 11px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  white-space: nowrap;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+#toast.ok   { color: #40d080; border-color: #40d08044; }
+#toast.warn { color: #f0c040; border-color: #f0c04044; }
+
+/* ── Per-panel URL bar ── */
+.panel-urlbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 0;
+  overflow: hidden;
+  background: var(--surface);
+  border-bottom: 0px solid var(--border);
+  transition: height 0.2s ease, border-bottom-width 0.2s ease;
+  flex-shrink: 0;
+  padding: 0 8px;
+}
+.panel-urlbar.open {
+  height: 32px;
+  border-bottom-width: 1px;
+}
+.panel-urlbar input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 3px 8px;
+  outline: none;
+  min-width: 0;
+  transition: border-color 0.15s;
+}
+.panel-urlbar input:focus { border-color: var(--accent); }
+.panel-urlbar input::placeholder { color: var(--muted); }
+.panel-urlbar .go-btn {
+  background: var(--accent);
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  padding: 3px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  opacity: 0.9;
+  transition: opacity 0.15s;
+}
+.panel-urlbar .go-btn:hover { opacity: 1; }
+
+/* Link icon button in topbar reload group */
+.url-toggle-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.1s, border-color 0.1s;
+}
+.url-toggle-btn:hover { color: var(--text); border-color: var(--muted); }
+.url-toggle-btn.active { color: var(--accent); border-color: var(--accent); }
+
+/* ── Spacer pushes private btn to far right ── */
+.spacer { flex: 1; }
+
+/* ── Temporary mode toggle button ── */
+#private-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 3px 9px;
+  cursor: pointer;
+  line-height: 1.4;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+#private-btn .private-icon { font-size: 12px; line-height: 1; }
+#private-btn .private-label { text-transform: uppercase; }
+#private-btn:hover { color: var(--text); border-color: var(--muted); }
+#private-btn.active {
+  color: #a78bfa;
+  border-color: #a78bfa;
+  background: #a78bfa18;
+}

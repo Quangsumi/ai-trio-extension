@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>AI Trio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="splitscreen.css">
+</head>
+<body>
+
+<div id="topbar">
+  <div class="logo">
+    <span class="logo-bar" style="background:#19c37d"></span>
+    <span class="logo-bar" style="background:#d97959"></span>
+    <span class="logo-bar" style="background:#4a9eff"></span>
+    AI TRIO
+  </div>
+  <div class="sep"></div>
+  <div id="toggles"></div>
+  <div class="sep"></div>
+  <div id="reloads"></div>
+  <div class="spacer"></div>
+  <button id="private-btn" title="Switch to temporary / incognito chat (all bots)">
+    <span class="private-icon">👻</span>
+    <span class="private-label">Temporary</span>
+  </button>
+</div>
+
+<div id="panels"></div>
+
+<div id="inputbar">
+  <textarea id="prompt" placeholder="Send to all visible chatbots… (Enter ↵ to send · Shift+Enter for new line)" rows="1"></textarea>
+  <button id="send-btn">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+    </svg>
+  </button>
+</div>
+
+<div id="toast"></div>
+
+<script src="chatbots.js"></script>
+<script src="splitscreen.js"></script>
+</body>
+</html>

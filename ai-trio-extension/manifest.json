@@ -1,0 +1,50 @@
+{
+  "manifest_version": 3,
+  "name": "AI Trio",
+  "version": "3.7.0",
+  "description": "ChatGPT, Claude, Gemini & Grok side-by-side with shared input.",
+
+  "action": {
+    "default_icon": {
+      "16":  "icons/icon16.png",
+      "48":  "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Open AI Trio"
+  },
+
+  "background": { "service_worker": "background.js" },
+
+  "permissions": ["tabs", "windows", "declarativeNetRequest"],
+
+  "host_permissions": [
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*",
+    "https://claude.ai/*",
+    "https://gemini.google.com/*",
+    "https://grok.com/*"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*",
+        "https://grok.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+
+  "declarative_net_request": {
+    "rule_resources": [{ "id": "strip_frame_headers", "enabled": true, "path": "rules.json" }]
+  },
+
+  "web_accessible_resources": [
+    { "resources": ["splitscreen.html"], "matches": ["<all_urls>"] }
+  ]
+}
